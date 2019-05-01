@@ -4,7 +4,7 @@
   "description": "This project is useful to learn React and Redux",
   "main": "index.html",
   "scripts": {
-    "test": "test"
+    "start": "webpack-dev-server --config webpack.config.dev.js --port 4000"
   },
   "dependencies": {
     "bootstrap": "4.3.1",
@@ -54,6 +54,43 @@
   },
   "engines": {
     "node": ">=8"
+  },
+  "babel": {
+    "presets": [
+      "babel-preset-react-app"
+    ]
+  },
+  "eslintConfig": {
+    "extends": [
+      "eslint:recommended",
+      "plugin:react/recommended",
+      "plugin:import/errors",
+      "plugin:import/warnings"
+    ],
+    "parser": "babel-eslint",
+    "parserOptions": {
+      "ecmaVersion": 2018,
+      "sourceType": "module",
+      "ecmaFeatures": {
+        "jsx": true
+      }
+    },
+    "env": {
+      "browser": true,
+      "node": true,
+      "es6": true,
+      "jest": true
+    },
+    "rules": {
+      "no-debugger": "off",
+      "react/prop-types": "warn"
+    },
+    "settings": {
+      "react": {
+        "version": "detect"
+      }
+    },
+    "root": true
   },
   "repository": {
     "type": "git",
