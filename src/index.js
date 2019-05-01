@@ -1,10 +1,13 @@
 import React from "react";
 import ReactDOM from "react-dom";
+import { BrowserRouter as Router } from 'react-router-dom';
+import App from './components/App';
 
-class Hi extends React.Component {
-  render() {
-    return <div>Hi There!</div>;
-  }
-}
+import 'bootstrap/dist/css/bootstrap.min.css';
+import './index.css';
 
-ReactDOM.render(<Hi/>, document.getElementById('app'));
+ReactDOM.render(
+  <Router>
+    <App />
+  </Router>
+  , document.getElementById('app'));
