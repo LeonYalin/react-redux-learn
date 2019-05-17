@@ -4,7 +4,10 @@
   "description": "This project is useful to learn React and Redux",
   "main": "index.html",
   "scripts": {
-    "start": "webpack-dev-server --config webpack.config.dev.js --port 4000"
+    "start": "run-p start:dev start:api",
+    "start:dev": "webpack-dev-server --config webpack.config.dev.js --port 4000",
+    "prestart:api": "node tools/createMockDb.js",
+    "start:api": "node tools/apiServer.js"
   },
   "dependencies": {
     "bootstrap": "4.3.1",
@@ -85,6 +88,7 @@
     },
     "rules": {
       "no-debugger": "off",
+      "no-console": "warn",
       "no-unused-vars": "warn",
       "react/prop-types": "warn"
     },

@@ -2,53 +2,55 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import * as courseActions from '../../redux/actions/course.actions';
+import * as authorActions from '../../redux/actions/author.actions';
 import { bindActionCreators } from 'redux';
+import CourseList from './CourseList';
 
 class CoursesPage extends React.Component {
   static propTypes = {
     actions: PropTypes.object.isRequired,
     courses: PropTypes.array.isRequired,
+    authors: PropTypes.array.isRequired,
   }
 
-  state = {
-    course: {
-      title: '',
+  componentDidMount() {
+    const { courses, authors, actions } = this.props;
+    if (!courses.length) {
+      actions.loadCourses().catch(e => { alert('Loading courses failed, ' + e); })
     }
-  }
-
-  onChange = (event) => {
-    const course = { ...this.state.course, title: event.target.value };
-    this.setState({ course })
-  }
-
-  onSubmit = (event) => {
-    event.preventDefault();
-    this.props.actions.createCourse(this.state.course);
+    if (!authors.length) {
+      actions.loadAuthors().catch(e => { alert('Loading author failed, ' + e); })
+    }
   }
 
   render() {
     return (
-      <form onSubmit={this.onSubmit}>
+      <>
         <h1>Courses page</h1>
-        <h3>Add course</h3>
-        <input onChange={this.onChange} value={this.state.course.title} />
-        <input type="submit" value="Save" />
-
-        {this.props.courses.map(course => (
-          <div key={course.title}>{course.title}</div>
-        ))}
-      </form>
+        <CourseList courses={this.props.courses} />
+      </>
     )
   }
 }
 
 function mapStateToProps(state) {
-  return { courses: state.courses };
+  return {
+    courses: state.authors.length === 0 ? [] : state.courses.map(course => {
+      return {
+        ...course,
+        authorName: state.authors.find(a => a.id === course.authorId).name,
+      }
+    }),
+    authors: state.authors,
+  };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    actions: bindActionCreators(courseActions, dispatch),
+    actions: {
+      loadCourses: bindActionCreators(courseActions.loadCourses, dispatch),
+      loadAuthors: bindActionCreators(authorActions.loadAuthors, dispatch),
+    },
   }
 }
 
