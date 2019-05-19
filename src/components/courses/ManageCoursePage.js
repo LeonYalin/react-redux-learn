@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { loadCourses } from '../../redux/actions/course.actions';
+import { loadCourses, saveCourse } from '../../redux/actions/course.actions';
 import { loadAuthors } from '../../redux/actions/author.actions';
 import { newCourse } from '../../../tools/mockData';
 import CourseForm from './CourseForm';
 
-function ManageCoursePage({ courses, authors, loadCourses, loadAuthors, ...props }) {
+function ManageCoursePage({ courses, authors, loadCourses, loadAuthors, saveCourse, ...props }) {
   const [course, setCourse] = useState({ ...props.course });
   const [errors, setErrors] = useState({});
 
@@ -21,13 +21,19 @@ function ManageCoursePage({ courses, authors, loadCourses, loadAuthors, ...props
 
   function handleChange(event) {
     const { name, value } = event.target;
+    // eslint-disable-next-line no-unused-vars
     setCourse(prevCourse => ({
       [name]: name === 'authorId' ? parseInt(value, 10) : value,
     }));
   }
 
+  function handleSave(event) {
+    event.preventDefault();
+    saveCourse(course);
+  }
+
   return (
-    <CourseForm course={course} errors={errors} authors={authors} onChange={handleChange} />
+    <CourseForm course={course} errors={errors} authors={authors} onChange={handleChange} onSave={handleSave} />
   )
 
 }
@@ -36,6 +42,7 @@ function ManageCoursePage({ courses, authors, loadCourses, loadAuthors, ...props
 ManageCoursePage.propTypes = {
   loadCourses: PropTypes.func.isRequired,
   loadAuthors: PropTypes.func.isRequired,
+  saveCourse: PropTypes.func.isRequired,
   course: PropTypes.object.isRequired,
   courses: PropTypes.array.isRequired,
   authors: PropTypes.array.isRequired,
@@ -49,6 +56,6 @@ function mapStateToProps(state) {
   };
 }
 
-const mapDispatchToProps = { loadCourses, loadAuthors };
+const mapDispatchToProps = { loadCourses, loadAuthors, saveCourse };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ManageCoursePage);
