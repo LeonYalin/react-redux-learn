@@ -6,12 +6,14 @@ import * as authorActions from '../../redux/actions/author.actions';
 import { bindActionCreators } from 'redux';
 import CourseList from './CourseList';
 import { Redirect } from 'react-router-dom';
+import Spinner from '../common/Spinner';
 
 class CoursesPage extends React.Component {
   static propTypes = {
     actions: PropTypes.object.isRequired,
     courses: PropTypes.array.isRequired,
     authors: PropTypes.array.isRequired,
+    loading: PropTypes.bool.isRequired,
   }
 
   state = {
@@ -33,15 +35,22 @@ class CoursesPage extends React.Component {
       <>
         {this.state.redirectToAddCoursePage && <Redirect to="/course" />}
         <h1>Courses</h1>
-        <button
-          style={{ marginBottom: 20 }}
-          className="btn btn-primary add-course"
-          onClick={() => this.setState({ redirectToAddCoursePage: true })}>
-          Add Course
-        </button>
-        <CourseList courses={this.props.courses} />
+        {this.props.loading ? (
+          <Spinner />
+        ) : (
+            <>
+              <button
+                style={{ marginBottom: 20 }}
+                className="btn btn-primary add-course"
+                onClick={() => this.setState({ redirectToAddCoursePage: true })}>
+                Add Course
+              </button>
+              <CourseList courses={this.props.courses} />
+            </>
+          )
+        }
       </>
-    )
+    );
   }
 }
 
@@ -54,6 +63,7 @@ function mapStateToProps(state) {
       }
     }),
     authors: state.authors,
+    loading: state.apiCallsInProgress > 0,
   };
 }
 

@@ -5,10 +5,13 @@ import { loadCourses, saveCourse } from '../../redux/actions/course.actions';
 import { loadAuthors } from '../../redux/actions/author.actions';
 import { newCourse } from '../../../tools/mockData';
 import CourseForm from './CourseForm';
+import Spinner from '../common/Spinner';
+import { toast } from 'react-toastify';
 
 function ManageCoursePage({ courses, authors, loadCourses, loadAuthors, saveCourse, history, ...props }) {
   const [course, setCourse] = useState({ ...props.course });
   const [errors, setErrors] = useState({});
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => { // same as ComponentDidMount
     if (!courses.length) {
@@ -33,13 +36,24 @@ function ManageCoursePage({ courses, authors, loadCourses, loadAuthors, saveCour
 
   function handleSave(event) {
     event.preventDefault();
+    setSaving(true);
     saveCourse(course).then(() => {
+      toast.success('Course saved.');
       history.push('/courses');
     });
   }
 
   return (
-    <CourseForm course={course} errors={errors} authors={authors} onChange={handleChange} onSave={handleSave} />
+    !authors.length || !courses.length
+      ? (<Spinner />) : (
+        <CourseForm
+          course={course}
+          errors={errors}
+          authors={authors}
+          onChange={handleChange}
+          onSave={handleSave}
+          saving={saving} />
+      )
   )
 }
 
