@@ -8,7 +8,7 @@ import CourseForm from './CourseForm';
 import Spinner from '../common/Spinner';
 import { toast } from 'react-toastify';
 
-function ManageCoursePage({ courses, authors, loadCourses, loadAuthors, saveCourse, history, ...props }) {
+export function ManageCoursePage({ courses, authors, loadCourses, loadAuthors, saveCourse, history, ...props }) {
   const [course, setCourse] = useState({ ...props.course });
   const [errors, setErrors] = useState({});
   const [saving, setSaving] = useState(false);
@@ -38,7 +38,7 @@ function ManageCoursePage({ courses, authors, loadCourses, loadAuthors, saveCour
     const { title, authorId, category} = course;
     const errors = {};
 
-    if (!title) errors.title = 'Title is required';
+    if (!title) errors.title = 'Title is required.';
     if (!authorId) errors.authorId = 'Author is required';
     if (!category) errors.category = 'Category is required';
 
